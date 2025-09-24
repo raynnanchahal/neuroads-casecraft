@@ -63,6 +63,24 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        display: "var(--font-display)",
+        body: "var(--font-body)",
+      },
+      boxShadow: {
+        elegant: "var(--shadow-elegant)",
+        card: "var(--shadow-card)",
+        hover: "var(--shadow-hover)",
+      },
+      backgroundImage: {
+        'gradient-primary': "var(--gradient-primary)",
+        'gradient-accent': "var(--gradient-accent)",
+        'gradient-subtle': "var(--gradient-subtle)",
+      },
+      transitionTimingFunction: {
+        smooth: "var(--transition-smooth)",
+        fast: "var(--transition-fast)",
+      },
       keyframes: {
         "accordion-down": {
           from: {
