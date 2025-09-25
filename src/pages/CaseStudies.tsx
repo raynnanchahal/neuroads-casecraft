@@ -1,16 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import CaseStudyCard from "@/components/case-study/CaseStudyCard";
-import { sampleCaseStudies } from "@/data/sampleCaseStudies";
+import { supabase } from "@/integrations/supabase/client";
 
 const CaseStudies = () => {
   const navigate = useNavigate();
-  const [caseStudies] = useState(sampleCaseStudies);
+  const [caseStudies, setCaseStudies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCaseStudies();
+  }, []);
+
+  const fetchCaseStudies = async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from('case_studies')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setCaseStudies(data || []);
+    } catch (error) {
+      console.error('Failed to fetch case studies:', error);
+      // Fallback to empty array if database fails
+      setCaseStudies([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCaseStudyClick = (id: string) => {
     navigate(`/case-study/${id}`);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading case studies...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
@@ -29,17 +61,28 @@ const CaseStudies = () => {
 
         {/* Case Studies Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {caseStudies.map((caseStudy) => (
-            <CaseStudyCard
-              key={caseStudy.id}
-              id={caseStudy.id}
-              backgroundImage={caseStudy.backgroundImage}
-              clientName={caseStudy.clientName}
-              headline={caseStudy.headline}
-              tags={caseStudy.tags}
-              onClick={() => handleCaseStudyClick(caseStudy.id)}
-            />
-          ))}
+          {caseStudies.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <h3 className="text-lg font-semibold text-muted-foreground">
+                No case studies available yet
+              </h3>
+              <p className="text-muted-foreground">
+                Check back soon for our latest success stories
+              </p>
+            </div>
+          ) : (
+            caseStudies.map((caseStudy: any) => (
+              <CaseStudyCard
+                key={caseStudy.id}
+                id={caseStudy.id}
+                backgroundImage={caseStudy.background_image}
+                clientName={caseStudy.client_name}
+                headline={caseStudy.headline}
+                tags={caseStudy.tags || []}
+                onClick={() => handleCaseStudyClick(caseStudy.id)}
+              />
+            ))
+          )}
         </div>
 
         {/* Stats Section */}

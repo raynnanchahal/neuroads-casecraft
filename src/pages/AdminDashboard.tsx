@@ -53,7 +53,7 @@ const AdminDashboard = () => {
 
   const fetchCaseStudies = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('case_studies')
         .select('*')
         .order('created_at', { ascending: false });
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
       };
 
       if (editingStudy) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('case_studies')
           .update(caseStudyData)
           .eq('id', editingStudy.id);
@@ -131,7 +131,7 @@ const AdminDashboard = () => {
         if (error) throw error;
         toast.success('Case study updated successfully');
       } else {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('case_studies')
           .insert([caseStudyData]);
         
@@ -151,7 +151,7 @@ const AdminDashboard = () => {
     if (!confirm('Are you sure you want to delete this case study?')) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('case_studies')
         .delete()
         .eq('id', id);
@@ -166,7 +166,7 @@ const AdminDashboard = () => {
 
   const togglePublish = async (id: string, currentStatus: boolean) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('case_studies')
         .update({ published: !currentStatus })
         .eq('id', id);

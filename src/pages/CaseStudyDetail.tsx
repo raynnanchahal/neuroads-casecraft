@@ -1,16 +1,48 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { ArrowLeft, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { sampleCaseStudies } from "@/data/sampleCaseStudies";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
 
 const CaseStudyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  const caseStudy = sampleCaseStudies.find(study => study.id === id);
+  const [caseStudy, setCaseStudy] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCaseStudy();
+  }, [id]);
+
+  const fetchCaseStudy = async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from('case_studies')
+        .select('*')
+        .eq('id', id)
+        .eq('published', true)
+        .single();
+
+      if (error) throw error;
+      setCaseStudy(data);
+    } catch (error) {
+      console.error('Failed to fetch case study:', error);
+      setCaseStudy(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-lg">Loading case study...</div>
+      </div>
+    );
+  }
 
   if (!caseStudy) {
     return (
@@ -45,18 +77,18 @@ const CaseStudyDetail = () => {
         <div className="relative mb-12">
           <div 
             className="h-80 rounded-lg bg-cover bg-center relative overflow-hidden"
-            style={{ backgroundImage: `url(${caseStudy.backgroundImage})` }}
+            style={{ backgroundImage: `url(${caseStudy.background_image})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/50 to-background/20" />
             <div className="absolute bottom-8 left-8 right-8">
               <Badge className="mb-4 bg-background/90 text-foreground">
-                {caseStudy.clientName}
+                {caseStudy.client_name}
               </Badge>
               <h1 className="text-4xl font-bold text-foreground mb-4">
                 {caseStudy.headline}
               </h1>
               <div className="flex flex-wrap gap-2">
-                {caseStudy.tags.map((tag, index) => (
+                {(caseStudy.tags || []).map((tag: string, index: number) => (
                   <Badge key={index} variant="secondary" className="bg-background/80">
                     {tag}
                   </Badge>
@@ -73,7 +105,7 @@ const CaseStudyDetail = () => {
             <h2 className="text-2xl font-bold text-foreground mb-6">Overview</h2>
             <Card className="p-8">
               <p className="text-card-foreground leading-relaxed text-lg">
-                {caseStudy.content.overview}
+                {caseStudy.overview}
               </p>
             </Card>
           </section>
@@ -84,7 +116,7 @@ const CaseStudyDetail = () => {
               <h2 className="text-2xl font-bold text-foreground mb-6">The Challenge</h2>
               <Card className="p-8 h-full">
                 <p className="text-card-foreground leading-relaxed">
-                  {caseStudy.content.challenge}
+                  {caseStudy.challenge}
                 </p>
               </Card>
             </section>
@@ -93,7 +125,7 @@ const CaseStudyDetail = () => {
               <h2 className="text-2xl font-bold text-foreground mb-6">Our Solution</h2>
               <Card className="p-8 h-full bg-gradient-accent text-accent-foreground">
                 <p className="leading-relaxed">
-                  {caseStudy.content.solution}
+                  {caseStudy.solution}
                 </p>
               </Card>
             </section>
@@ -103,7 +135,7 @@ const CaseStudyDetail = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-6">Results</h2>
             <div className="grid md:grid-cols-3 gap-6">
-              {caseStudy.content.results.map((result, index) => (
+              {(caseStudy.results || []).map((result: any, index: number) => (
                 <Card key={index} className="p-8 text-center">
                   <div className="text-4xl font-bold text-accent mb-2">
                     {result.value}
@@ -120,15 +152,15 @@ const CaseStudyDetail = () => {
           </section>
 
           {/* Testimonial */}
-          {caseStudy.content.testimonial && (
+          {caseStudy.testimonial && (
             <section>
               <Card className="p-8 bg-primary text-primary-foreground">
                 <Quote className="w-8 h-8 mb-4 opacity-50" />
                 <blockquote className="text-xl italic leading-relaxed mb-4">
-                  "{caseStudy.content.testimonial}"
+                  "{caseStudy.testimonial}"
                 </blockquote>
                 <cite className="text-sm opacity-80">
-                  — {caseStudy.clientName} Team
+                  — {caseStudy.client_name} Team
                 </cite>
               </Card>
             </section>

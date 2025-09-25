@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -29,9 +30,11 @@ const Header = () => {
           </div>
 
           {/* Admin Button */}
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-            Admin
-          </Button>
+          <Link to="/admin/login">
+            <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              Admin
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
