@@ -14,7 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      access_codes: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+        }
+        Relationships: []
+      }
+      case_studies: {
+        Row: {
+          access_code: string | null
+          categories: string[] | null
+          challenge: string | null
+          client_name: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          media_urls: Json | null
+          published_at: string | null
+          result: string | null
+          solution: string | null
+          status: string | null
+          subtitle: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          access_code?: string | null
+          categories?: string[] | null
+          challenge?: string | null
+          client_name: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          media_urls?: Json | null
+          published_at?: string | null
+          result?: string | null
+          solution?: string | null
+          status?: string | null
+          subtitle?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          access_code?: string | null
+          categories?: string[] | null
+          challenge?: string | null
+          client_name?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          media_urls?: Json | null
+          published_at?: string | null
+          result?: string | null
+          solution?: string | null
+          status?: string | null
+          subtitle?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
