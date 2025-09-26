@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
 import CaseStudyCard from "@/components/case-study/CaseStudyCard";
-import { supabase } from "@/integrations/supabase/client";
+import AccessGate from "@/components/AccessGate";
 
 const CaseStudies = () => {
   const navigate = useNavigate();
@@ -15,17 +16,16 @@ const CaseStudies = () => {
 
   const fetchCaseStudies = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('case_studies')
         .select('*')
-        .eq('published', true)
-        .order('created_at', { ascending: false });
+        .eq('status', 'published')
+        .order('published_at', { ascending: false });
 
       if (error) throw error;
       setCaseStudies(data || []);
     } catch (error) {
       console.error('Failed to fetch case studies:', error);
-      // Fallback to empty array if database fails
       setCaseStudies([]);
     } finally {
       setLoading(false);
@@ -45,7 +45,8 @@ const CaseStudies = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <AccessGate>
+      <div className="min-h-screen bg-gradient-subtle">
       <Header />
       
       <main className="max-w-7xl mx-auto px-6 py-12">
@@ -75,9 +76,9 @@ const CaseStudies = () => {
               <CaseStudyCard
                 key={caseStudy.id}
                 id={caseStudy.id}
-                backgroundImage={caseStudy.background_image}
+                backgroundImage={caseStudy.media_urls?.[0] || '/placeholder.svg'}
                 clientName={caseStudy.client_name}
-                headline={caseStudy.headline}
+                headline={caseStudy.title}
                 tags={caseStudy.tags || []}
                 onClick={() => handleCaseStudyClick(caseStudy.id)}
               />
@@ -117,6 +118,7 @@ const CaseStudies = () => {
         </div>
       </main>
     </div>
+    </AccessGate>
   );
 };
 

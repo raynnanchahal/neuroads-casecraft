@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState('Raynnanchahal@gmail.com');
+  const [email, setEmail] = useState('hrithishnachahal@gmail.com');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
