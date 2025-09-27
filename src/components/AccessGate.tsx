@@ -28,12 +28,9 @@ const AccessGate: React.FC<AccessGateProps> = ({ children }) => {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase
-        .from('access_codes')
-        .select('*')
-        .eq('code', accessCode.toUpperCase())
-        .eq('is_active', true)
-        .single();
+      const { data, error } = await supabase.rpc('verify_access_code', {
+        input_code: accessCode
+      });
 
       if (error || !data) {
         toast.error('Invalid access code');
