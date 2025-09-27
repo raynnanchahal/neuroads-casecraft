@@ -19,12 +19,12 @@ const CaseStudyDetail = () => {
 
   const fetchCaseStudy = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('case_studies')
         .select('*')
         .eq('id', id)
-        .eq('published', true)
-        .single();
+        .eq('status', 'published')
+        .maybeSingle();
 
       if (error) throw error;
       setCaseStudy(data);
