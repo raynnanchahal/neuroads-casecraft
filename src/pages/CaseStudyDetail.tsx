@@ -1,40 +1,113 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Quote, Calendar, User, Play } from "lucide-react";
+import { ArrowLeft, Calendar, User, Play, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
-import { cleanHtmlText, textToParagraphs, formatDate } from "@/lib/text-utils";
+import { formatDate } from "@/lib/text-utils";
+import RichContentRenderer from "@/components/RichContentRenderer";
 
 const CaseStudyDetail = () => {
-  const { id } = useParams();
+  const { identifier } = useParams();
   const navigate = useNavigate();
   const [caseStudy, setCaseStudy] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCaseStudy();
-  }, [id]);
+    if (identifier) {
+      fetchCaseStudy();
+    }
+  }, [identifier]);
 
   const fetchCaseStudy = async () => {
+    if (!identifier) return;
+    
     try {
-      const { data, error } = await supabase
-        .from('case_studies')
-        .select('*')
-        .eq('id', id)
-        .eq('status', 'published')
-        .maybeSingle();
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(identifier);
+      
+      // Query by ID or slug
+      let result;
+      if (isUUID) {
+        result = await supabase.from('case_studies').select('*').eq('id', identifier).eq('status', 'published').maybeSingle();
+      } else {
+        result = await supabase.from('case_studies').select('*').eq('slug', identifier).eq('status', 'published').maybeSingle();
+      }
 
-      if (error) throw error;
-      setCaseStudy(data);
+      setCaseStudy(result.data || null);
     } catch (error) {
-      console.error('Failed to fetch case study:', error);
+      console.error('Error:', error);
       setCaseStudy(null);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Helper function to render media content with lightbox
+  const renderMedia = (mediaUrls: any) => {
+    if (!mediaUrls || typeof mediaUrls !== 'object') return null;
+    
+    const mediaArray = Array.isArray(mediaUrls) ? mediaUrls : Object.values(mediaUrls);
+    if (mediaArray.length === 0) return null;
+
+    const handleImageClick = (url: string) => {
+      const lightbox = document.createElement('div');
+      lightbox.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm cursor-pointer';
+      lightbox.onclick = () => document.body.removeChild(lightbox);
+      
+      const img = document.createElement('img');
+      img.src = url;
+      img.className = 'max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl';
+      img.onclick = (e) => e.stopPropagation();
+      
+      const closeBtn = document.createElement('button');
+      closeBtn.innerHTML = '×';
+      closeBtn.className = 'absolute top-4 right-4 text-white text-5xl hover:text-gray-300 transition-colors font-light leading-none cursor-pointer';
+      closeBtn.onclick = () => document.body.removeChild(lightbox);
+      
+      lightbox.appendChild(img);
+      lightbox.appendChild(closeBtn);
+      document.body.appendChild(lightbox);
+    };
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {mediaArray.map((url: string, index: number) => {
+          const isVideo = url.includes('.mp4') || url.includes('.webm') || url.includes('.mov');
+          
+          return (
+            <div key={index} className="relative group overflow-hidden rounded-xl bg-muted shadow-lg hover:shadow-xl transition-shadow">
+              {isVideo ? (
+                <div className="relative aspect-video">
+                  <video 
+                    src={url} 
+                    className="w-full h-full object-cover"
+                    controls
+                    poster={url.replace(/\.(mp4|webm|mov)$/, '.jpg')}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                    <Play className="w-12 h-12 text-white" />
+                  </div>
+                </div>
+              ) : (
+                <div className="aspect-video cursor-pointer" onClick={() => handleImageClick(url)}>
+                  <img 
+                    src={url} 
+                    alt={`Case study media ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                    <ZoomIn className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   if (loading) {
@@ -58,67 +131,6 @@ const CaseStudyDetail = () => {
       </div>
     );
   }
-
-  // Helper function to render media content
-  const renderMedia = (mediaUrls: any) => {
-    if (!mediaUrls || typeof mediaUrls !== 'object') return null;
-    
-    const mediaArray = Array.isArray(mediaUrls) ? mediaUrls : Object.values(mediaUrls);
-    if (mediaArray.length === 0) return null;
-
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mediaArray.map((url: string, index: number) => {
-          const isVideo = url.includes('.mp4') || url.includes('.webm') || url.includes('.mov');
-          
-          return (
-            <div key={index} className="relative group overflow-hidden rounded-lg bg-muted">
-              {isVideo ? (
-                <div className="relative aspect-video">
-                  <video 
-                    src={url} 
-                    className="w-full h-full object-cover"
-                    controls
-                    poster={url.replace(/\.(mp4|webm|mov)$/, '.jpg')}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                    <Play className="w-12 h-12 text-white" />
-                  </div>
-                </div>
-              ) : (
-                <div className="aspect-video">
-                  <img 
-                    src={url} 
-                    alt={`Case study media ${index + 1}`}
-                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  // Helper function to render clean text content
-  const renderCleanText = (content: string) => {
-    if (!content) return null;
-    
-    const cleanedText = cleanHtmlText(content);
-    const paragraphs = textToParagraphs(cleanedText);
-    
-    return (
-      <div className="space-y-4">
-        {paragraphs.map((paragraph, index) => (
-          <p key={index} className="leading-relaxed text-card-foreground">
-            {paragraph}
-          </p>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -196,77 +208,39 @@ const CaseStudyDetail = () => {
       </section>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-6 py-16">
-        <div className="space-y-16">
-          {/* Overview */}
-          {caseStudy.description && (
-            <section>
-              <h2 className="text-3xl font-bold text-foreground mb-8">Overview</h2>
-              <Card className="p-8 md:p-12">
-                <div className="prose prose-lg max-w-none">
-                  {renderCleanText(caseStudy.description)}
-                </div>
-              </Card>
-            </section>
+      <main className="max-w-6xl mx-auto px-6 py-16">
+        <div className="space-y-12">
+          {/* Rich Content Sections */}
+          {caseStudy.content && (
+            <div className="space-y-8">
+              <RichContentRenderer 
+                content={caseStudy.content}
+                className="text-card-foreground"
+              />
+            </div>
           )}
 
-          {/* Challenge & Solution */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            {caseStudy.challenge && (
-              <section>
-                <h2 className="text-3xl font-bold text-foreground mb-8">The Challenge</h2>
-                <Card className="p-8 md:p-12 h-full">
-                  <div className="prose max-w-none">
-                    {renderCleanText(caseStudy.challenge)}
-                  </div>
-                </Card>
-              </section>
-            )}
-
-            {caseStudy.solution && (
-              <section>
-                <h2 className="text-3xl font-bold text-foreground mb-8">Our Solution</h2>
-                <Card className="p-8 md:p-12 h-full bg-gradient-to-br from-accent/5 to-primary/5 border-accent/20">
-                  <div className="prose max-w-none">
-                    {renderCleanText(caseStudy.solution)}
-                  </div>
-                </Card>
-              </section>
-            )}
-          </div>
-
-          {/* Results */}
-          {caseStudy.result && (
-            <section>
-              <h2 className="text-3xl font-bold text-foreground mb-8">Results & Impact</h2>
-              <Card className="p-8 md:p-12 bg-gradient-to-br from-primary/5 to-accent/5">
-                <div className="prose prose-lg max-w-none">
-                  {renderCleanText(caseStudy.result)}
-                </div>
-              </Card>
-            </section>
+          {/* Fallback to legacy content if content field is empty */}
+          {!caseStudy.content && (
+            <div className="space-y-12">
+              {/* Show legacy fields if they exist */}
+              {caseStudy.description && (
+                <section>
+                  <Card className="p-8 md:p-12">
+                    <div className="prose prose-lg max-w-none text-card-foreground">
+                      {caseStudy.description}
+                    </div>
+                  </Card>
+                </section>
+              )}
+            </div>
           )}
 
-          {/* Media Gallery */}
-          {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 1 && (
-            <section>
+          {/* Media Gallery - Always show if there are media URLs */}
+          {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 0 && (
+            <section className="mt-16">
               <h2 className="text-3xl font-bold text-foreground mb-8">Project Gallery</h2>
               {renderMedia(caseStudy.media_urls)}
-            </section>
-          )}
-
-          {/* Client Testimonial */}
-          {caseStudy.testimonial && (
-            <section>
-              <Card className="p-8 md:p-12 bg-gradient-primary text-primary-foreground">
-                <Quote className="w-12 h-12 mb-6 opacity-60" />
-                <blockquote className="text-xl md:text-2xl italic leading-relaxed mb-6">
-                  "{cleanHtmlText(caseStudy.testimonial)}"
-                </blockquote>
-                <cite className="text-lg opacity-90 font-medium">
-                  — {caseStudy.client_name} Team
-                </cite>
-              </Card>
             </section>
           )}
         </div>
@@ -282,7 +256,12 @@ const CaseStudyDetail = () => {
               <p className="text-xl md:text-2xl mb-10 opacity-90 max-w-2xl mx-auto leading-relaxed">
                 Let's create a success story like this for your company. Get started with a free consultation.
               </p>
-              <Button size="lg" variant="secondary" className="px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                variant="secondary" 
+                className="px-8 py-4 text-lg"
+                onClick={() => window.open('https://calendly.com/ritishnanchahal-amld/discovery', '_blank')}
+              >
                 Start Your Project Today
               </Button>
             </div>
