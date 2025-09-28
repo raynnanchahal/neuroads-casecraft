@@ -9,10 +9,24 @@ import Header from "@/components/layout/Header";
 import { formatDate } from "@/lib/text-utils";
 import RichContentRenderer from "@/components/RichContentRenderer";
 
+interface CaseStudyType {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  client_name: string;
+  content: string | null;
+  tags: string[];
+  categories: string[];
+  media_urls: any;
+  published_at: string | null;
+  slug: string | null;
+  status: string;
+}
+
 const CaseStudyDetail = () => {
-  const { identifier } = useParams();
+  const { identifier } = useParams<{ identifier: string }>();
   const navigate = useNavigate();
-  const [caseStudy, setCaseStudy] = useState<any>(null);
+  const [caseStudy, setCaseStudy] = useState<CaseStudyType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,27 +38,30 @@ const CaseStudyDetail = () => {
   const fetchCaseStudy = async () => {
     if (!identifier) return;
     
+    setLoading(true);
     try {
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(identifier);
       
-      // Query by ID or slug
-      let result;
-      if (isUUID) {
-        result = await supabase.from('case_studies').select('*').eq('id', identifier).eq('status', 'published').maybeSingle();
-      } else {
-        result = await supabase.from('case_studies').select('*').eq('slug', identifier).eq('status', 'published').maybeSingle();
+      // Simple approach without complex type inference
+      const response = await fetch(`/api/case-studies/${identifier}`).catch(() => null);
+      
+      if (!response) {
+        // Fallback to direct query
+        const query = supabase.from('case_studies').select('*').eq('status', 'published');
+        const { data } = isUUID 
+          ? await query.eq('id', identifier).limit(1)
+          : await query.eq('slug', identifier).limit(1);
+        
+        setCaseStudy(data && data.length > 0 ? data[0] as any : null);
       }
-
-      setCaseStudy(result.data || null);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error fetching case study:', error);
       setCaseStudy(null);
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper function to render media content with lightbox
   const renderMedia = (mediaUrls: any) => {
     if (!mediaUrls || typeof mediaUrls !== 'object') return null;
     
@@ -217,22 +234,6 @@ const CaseStudyDetail = () => {
                 content={caseStudy.content}
                 className="text-card-foreground"
               />
-            </div>
-          )}
-
-          {/* Fallback to legacy content if content field is empty */}
-          {!caseStudy.content && (
-            <div className="space-y-12">
-              {/* Show legacy fields if they exist */}
-              {caseStudy.description && (
-                <section>
-                  <Card className="p-8 md:p-12">
-                    <div className="prose prose-lg max-w-none text-card-foreground">
-                      {caseStudy.description}
-                    </div>
-                  </Card>
-                </section>
-              )}
             </div>
           )}
 
