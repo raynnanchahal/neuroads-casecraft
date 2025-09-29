@@ -12,14 +12,16 @@ import RichContentRenderer from "@/components/RichContentRenderer";
 interface CaseStudyType {
   id: string;
   title: string;
-  subtitle: string | null;
+  subtitle?: string;
   client_name: string;
-  content: string | null;
-  tags: string[];
-  categories: string[];
-  media_urls: any;
-  published_at: string | null;
-  slug: string | null;
+  challenge?: string;
+  description?: string;
+  result?: string;
+  solution?: string;
+  tags?: string[];
+  categories?: string[];
+  media_urls?: any;
+  published_at?: string;
   status: string;
 }
 
@@ -42,17 +44,18 @@ const CaseStudyDetail = () => {
     try {
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(identifier);
       
-      // Simple approach without complex type inference
-      const response = await fetch(`/api/case-studies/${identifier}`).catch(() => null);
+      const { data, error } = await supabase
+        .from('case_studies')
+        .select('*')
+        .eq('status', 'published')
+        .eq('id', identifier)
+        .maybeSingle();
       
-      if (!response) {
-        // Fallback to direct query
-        const query = supabase.from('case_studies').select('*').eq('status', 'published');
-        const { data } = isUUID 
-          ? await query.eq('id', identifier).limit(1)
-          : await query.eq('slug', identifier).limit(1);
-        
-        setCaseStudy(data && data.length > 0 ? data[0] as any : null);
+      if (error) {
+        console.error('Error fetching case study:', error);
+        setCaseStudy(null);
+      } else {
+        setCaseStudy(data);
       }
     } catch (error) {
       console.error('Error fetching case study:', error);
@@ -228,12 +231,43 @@ const CaseStudyDetail = () => {
       <main className="max-w-6xl mx-auto px-6 py-16">
         <div className="space-y-12">
           {/* Rich Content Sections */}
-          {caseStudy.content && (
+          {(caseStudy.challenge || caseStudy.description || caseStudy.solution || caseStudy.result) && (
             <div className="space-y-8">
-              <RichContentRenderer 
-                content={caseStudy.content}
-                className="text-card-foreground"
-              />
+              {caseStudy.description && (
+                <section>
+                  <h2 className="text-3xl font-bold text-foreground mb-6">Overview</h2>
+                  <div className="prose prose-lg max-w-none text-card-foreground">
+                    <p>{caseStudy.description}</p>
+                  </div>
+                </section>
+              )}
+              
+              {caseStudy.challenge && (
+                <section>
+                  <h2 className="text-3xl font-bold text-foreground mb-6">Challenge</h2>
+                  <div className="prose prose-lg max-w-none text-card-foreground">
+                    <p>{caseStudy.challenge}</p>
+                  </div>
+                </section>
+              )}
+              
+              {caseStudy.solution && (
+                <section>
+                  <h2 className="text-3xl font-bold text-foreground mb-6">Solution</h2>
+                  <div className="prose prose-lg max-w-none text-card-foreground">
+                    <p>{caseStudy.solution}</p>
+                  </div>
+                </section>
+              )}
+              
+              {caseStudy.result && (
+                <section>
+                  <h2 className="text-3xl font-bold text-foreground mb-6">Results</h2>
+                  <div className="prose prose-lg max-w-none text-card-foreground">
+                    <p>{caseStudy.result}</p>
+                  </div>
+                </section>
+              )}
             </div>
           )}
 
