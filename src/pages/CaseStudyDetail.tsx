@@ -14,14 +14,12 @@ interface CaseStudyType {
   title: string;
   subtitle?: string;
   client_name: string;
-  challenge?: string;
-  description?: string;
-  result?: string;
-  solution?: string;
+  content?: string;
   tags?: string[];
   categories?: string[];
   media_urls?: any;
   published_at?: string;
+  slug?: string;
   status: string;
 }
 
@@ -231,43 +229,12 @@ const CaseStudyDetail = () => {
       <main className="max-w-6xl mx-auto px-6 py-16">
         <div className="space-y-12">
           {/* Rich Content Sections */}
-          {(caseStudy.challenge || caseStudy.description || caseStudy.solution || caseStudy.result) && (
+          {caseStudy.content && (
             <div className="space-y-8">
-              {caseStudy.description && (
-                <section>
-                  <h2 className="text-3xl font-bold text-foreground mb-6">Overview</h2>
-                  <div className="prose prose-lg max-w-none text-card-foreground">
-                    <p>{caseStudy.description}</p>
-                  </div>
-                </section>
-              )}
-              
-              {caseStudy.challenge && (
-                <section>
-                  <h2 className="text-3xl font-bold text-foreground mb-6">Challenge</h2>
-                  <div className="prose prose-lg max-w-none text-card-foreground">
-                    <p>{caseStudy.challenge}</p>
-                  </div>
-                </section>
-              )}
-              
-              {caseStudy.solution && (
-                <section>
-                  <h2 className="text-3xl font-bold text-foreground mb-6">Solution</h2>
-                  <div className="prose prose-lg max-w-none text-card-foreground">
-                    <p>{caseStudy.solution}</p>
-                  </div>
-                </section>
-              )}
-              
-              {caseStudy.result && (
-                <section>
-                  <h2 className="text-3xl font-bold text-foreground mb-6">Results</h2>
-                  <div className="prose prose-lg max-w-none text-card-foreground">
-                    <p>{caseStudy.result}</p>
-                  </div>
-                </section>
-              )}
+              <RichContentRenderer 
+                content={caseStudy.content}
+                className="text-card-foreground"
+              />
             </div>
           )}
 
