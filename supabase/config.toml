@@ -1,1 +1,4 @@
 project_id = "lvhbsunovyhyngtiweye"
+
+[functions.search-case-studies]
+verify_jwt = false
