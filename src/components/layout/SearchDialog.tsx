@@ -20,21 +20,33 @@ const SearchDialog = ({ open, onOpenChange }: SearchDialogProps) => {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      console.log("Empty query, skipping search");
+      return;
+    }
 
+    console.log("Starting search with query:", query);
     setLoading(true);
     setAnswer("");
 
     try {
+      console.log("Invoking search-case-studies function...");
       const { data, error } = await supabase.functions.invoke('search-case-studies', {
         body: { query: query.trim() }
       });
 
-      if (error) throw error;
+      console.log("Function response:", { data, error });
+
+      if (error) {
+        console.error("Function error:", error);
+        throw error;
+      }
 
       if (data?.answer) {
+        console.log("Got answer:", data.answer);
         setAnswer(data.answer);
       } else {
+        console.error("No answer in response:", data);
         throw new Error("No response received");
       }
     } catch (error) {
