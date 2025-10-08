@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, User, Play, ZoomIn } from "lucide-react";
+import { ArrowLeft, Calendar, User, Play, ZoomIn, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
 import { formatDate } from "@/lib/text-utils";
 import RichContentRenderer from "@/components/RichContentRenderer";
+import { useCaseStudyLike } from "@/hooks/useCaseStudyLike";
 
 interface CaseStudyType {
   id: string;
@@ -21,6 +22,7 @@ interface CaseStudyType {
   published_at?: string;
   slug?: string;
   status: string;
+  likes_count?: number;
 }
 
 const CaseStudyDetail = () => {
@@ -28,6 +30,10 @@ const CaseStudyDetail = () => {
   const navigate = useNavigate();
   const [caseStudy, setCaseStudy] = useState<CaseStudyType | null>(null);
   const [loading, setLoading] = useState(true);
+  const { likes, isLiked, handleLike } = useCaseStudyLike(
+    caseStudy?.id || '', 
+    caseStudy?.likes_count || 0
+  );
 
   useEffect(() => {
     if (identifier) {
@@ -196,6 +202,24 @@ const CaseStudyDetail = () => {
                   {caseStudy.subtitle}
                 </p>
               )}
+
+              {/* Like Button */}
+              <div className="mb-8">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLike();
+                  }}
+                  className="gap-2 hover:scale-105 transition-transform"
+                >
+                  <Heart 
+                    className={`w-5 h-5 transition-colors ${isLiked ? 'fill-red-500 text-red-500' : ''}`}
+                  />
+                  <span className="font-semibold">{likes} Likes</span>
+                </Button>
+              </div>
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-8">

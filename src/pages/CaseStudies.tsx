@@ -80,6 +80,7 @@ const CaseStudies = () => {
                 clientName={caseStudy.client_name}
                 headline={caseStudy.title}
                 tags={caseStudy.tags || []}
+                likesCount={caseStudy.likes_count || 0}
                 onClick={() => handleCaseStudyClick(caseStudy.id)}
               />
             ))

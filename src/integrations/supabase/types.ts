@@ -42,16 +42,15 @@ export type Database = {
         Row: {
           access_code: string | null
           categories: string[] | null
-          challenge: string | null
           client_name: string
+          content: string | null
           created_at: string
           created_by: string | null
-          description: string | null
           id: string
+          likes_count: number
           media_urls: Json | null
           published_at: string | null
-          result: string | null
-          solution: string | null
+          slug: string | null
           status: string | null
           subtitle: string | null
           tags: string[] | null
@@ -61,16 +60,15 @@ export type Database = {
         Insert: {
           access_code?: string | null
           categories?: string[] | null
-          challenge?: string | null
           client_name: string
+          content?: string | null
           created_at?: string
           created_by?: string | null
-          description?: string | null
           id?: string
+          likes_count?: number
           media_urls?: Json | null
           published_at?: string | null
-          result?: string | null
-          solution?: string | null
+          slug?: string | null
           status?: string | null
           subtitle?: string | null
           tags?: string[] | null
@@ -80,16 +78,15 @@ export type Database = {
         Update: {
           access_code?: string | null
           categories?: string[] | null
-          challenge?: string | null
           client_name?: string
+          content?: string | null
           created_at?: string
           created_by?: string | null
-          description?: string | null
           id?: string
+          likes_count?: number
           media_urls?: Json | null
           published_at?: string | null
-          result?: string | null
-          solution?: string | null
+          slug?: string | null
           status?: string | null
           subtitle?: string | null
           tags?: string[] | null
@@ -103,6 +100,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      increment_case_study_likes: {
+        Args: { case_study_id: string }
+        Returns: number
+      }
       verify_access_code: {
         Args: { input_code: string }
         Returns: boolean

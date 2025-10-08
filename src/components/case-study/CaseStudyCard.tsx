@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Heart } from "lucide-react";
+import { useCaseStudyLike } from "@/hooks/useCaseStudyLike";
 
 interface CaseStudyCardProps {
   id: string;
@@ -8,16 +10,26 @@ interface CaseStudyCardProps {
   clientName: string;
   headline: string;
   tags: string[];
+  likesCount: number;
   onClick: () => void;
 }
 
 const CaseStudyCard = ({
+  id,
   backgroundImage,
   clientName,
   headline,
   tags,
+  likesCount,
   onClick
 }: CaseStudyCardProps) => {
+  const { likes, isLiked, handleLike } = useCaseStudyLike(id, likesCount);
+
+  const onLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleLike();
+  };
+
   return (
     <Card 
       className="group relative overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-hover hover:-translate-y-1 bg-card"
@@ -47,9 +59,22 @@ const CaseStudyCard = ({
 
       {/* Content */}
       <div className="p-6 space-y-4">
-        <h3 className="font-semibold text-lg text-card-foreground line-clamp-2 group-hover:text-accent transition-colors">
-          {headline}
-        </h3>
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-semibold text-lg text-card-foreground line-clamp-2 group-hover:text-accent transition-colors flex-1">
+            {headline}
+          </h3>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onLikeClick}
+            className="gap-1 hover:scale-110 transition-transform shrink-0"
+          >
+            <Heart 
+              className={`w-4 h-4 transition-colors ${isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+            />
+            <span className="text-sm font-medium">{likes}</span>
+          </Button>
+        </div>
         
         {/* Tags */}
         <div className="flex flex-wrap gap-2">
