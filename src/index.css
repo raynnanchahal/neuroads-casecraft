@@ -9,7 +9,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Flow Research Collective Inspired - Dark Theme with Cyan Accents */
-    --background: 0 0% 7%;
+    --background: 0 0% 2.4%;
     --foreground: 0 0% 98%;
 
     --card: 0 0% 10%;
