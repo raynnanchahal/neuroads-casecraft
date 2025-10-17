@@ -193,18 +193,18 @@ const CaseStudyDetail = () => {
               </div>
 
               {/* Title & Subtitle */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight uppercase">
                 {caseStudy.title}
               </h1>
               
               {caseStudy.subtitle && (
-                <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
+                <p className="text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed">
                   {caseStudy.subtitle}
                 </p>
               )}
 
               {/* Like Button */}
-              <div className="mb-8">
+              <div className="mb-10">
                 <Button
                   variant="outline"
                   size="lg"
@@ -212,24 +212,24 @@ const CaseStudyDetail = () => {
                     e.stopPropagation();
                     handleLike();
                   }}
-                  className="gap-2 hover:scale-105 transition-transform"
+                  className="gap-2 hover:scale-105 transition-all duration-300 border-accent/50 hover:bg-accent/10 hover:border-accent hover:text-accent"
                 >
                   <Heart 
-                    className={`w-5 h-5 transition-colors ${isLiked ? 'fill-red-500 text-red-500' : ''}`}
+                    className={`w-5 h-5 transition-all duration-300 ${isLiked ? 'fill-accent text-accent' : ''}`}
                   />
-                  <span className="font-semibold">{likes} Likes</span>
+                  <span className="font-bold">{likes} LIKES</span>
                 </Button>
               </div>
 
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2 mb-10">
                 {(caseStudy.tags || []).map((tag: string, index: number) => (
-                  <Badge key={index} variant="secondary" className="px-3 py-1">
+                  <Badge key={index} variant="outline" className="px-4 py-1.5 uppercase tracking-wider border-accent/50 text-accent hover:bg-accent/10">
                     {tag}
                   </Badge>
                 ))}
                 {(caseStudy.categories || []).map((category: string, index: number) => (
-                  <Badge key={`cat-${index}`} className="px-3 py-1">
+                  <Badge key={`cat-${index}`} className="px-4 py-1.5 uppercase tracking-wider bg-accent/20 text-accent border-accent/50">
                     {category}
                   </Badge>
                 ))}
@@ -239,10 +239,10 @@ const CaseStudyDetail = () => {
               <Button 
                 onClick={() => navigate("/")} 
                 variant="ghost" 
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-accent transition-colors duration-300"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Case Studies
+                BACK TO CASE STUDIES
               </Button>
             </div>
           </div>
@@ -264,31 +264,33 @@ const CaseStudyDetail = () => {
 
           {/* Media Gallery - Always show if there are media URLs */}
           {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 0 && (
-            <section className="mt-16">
-              <h2 className="text-3xl font-bold text-foreground mb-8">Project Gallery</h2>
+            <section className="mt-20">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-10 tracking-tight uppercase">
+                PROJECT <span className="text-accent">GALLERY</span>
+              </h2>
               {renderMedia(caseStudy.media_urls)}
             </section>
           )}
         </div>
 
         {/* CTA Section */}
-        <div className="mt-24 text-center">
-          <Card className="p-12 md:p-16 bg-gradient-to-br from-primary via-primary to-accent text-primary-foreground overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 opacity-50" />
-            <div className="relative">
-              <h3 className="text-3xl md:text-4xl font-bold mb-6">
-                Ready to Transform Your Business?
+        <div className="mt-32 text-center">
+          <Card className="p-16 md:p-20 bg-card/50 backdrop-blur-sm border-accent/30 shadow-elegant overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-accent opacity-5" />
+            <div className="relative space-y-8">
+              <h3 className="text-4xl md:text-5xl font-bold mb-8 tracking-tight uppercase">
+                READY TO TRANSFORM YOUR <span className="text-accent">BUSINESS?</span>
               </h3>
-              <p className="text-xl md:text-2xl mb-10 opacity-90 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
                 Let's create a success story like this for your company. Get started with a free consultation.
               </p>
               <Button 
                 size="lg" 
-                variant="secondary" 
-                className="px-8 py-4 text-lg"
+                variant="outline"
+                className="px-10 py-6 text-lg uppercase tracking-wider border-accent/50 hover:bg-accent/10 hover:border-accent text-accent hover:scale-105 transition-all duration-300 font-bold"
                 onClick={() => window.open('https://calendly.com/ritishnanchahal-amld/discovery', '_blank')}
               >
-                Start Your Project Today
+                START YOUR PROJECT TODAY
               </Button>
             </div>
           </Card>

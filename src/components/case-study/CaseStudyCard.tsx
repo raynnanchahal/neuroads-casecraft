@@ -32,7 +32,7 @@ const CaseStudyCard = ({
 
   return (
     <Card 
-      className="group relative overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-hover hover:-translate-y-1 bg-card"
+      className="group relative overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-elegant hover:-translate-y-2 hover:border-accent/50 bg-card/80 backdrop-blur-sm border-border/50"
       onClick={onClick}
     >
       {/* Background Image */}
@@ -60,19 +60,19 @@ const CaseStudyCard = ({
       {/* Content */}
       <div className="p-6 space-y-4">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-semibold text-lg text-card-foreground line-clamp-2 group-hover:text-accent transition-colors flex-1">
+          <h3 className="font-bold text-xl text-card-foreground line-clamp-2 group-hover:text-accent transition-colors duration-300 flex-1 tracking-tight uppercase">
             {headline}
           </h3>
           <Button
             variant="ghost"
             size="sm"
             onClick={onLikeClick}
-            className="gap-1 hover:scale-110 transition-transform shrink-0"
+            className="gap-1.5 hover:scale-110 transition-all duration-300 shrink-0 hover:text-accent"
           >
             <Heart 
-              className={`w-4 h-4 transition-colors ${isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+              className={`w-5 h-5 transition-all duration-300 ${isLiked ? 'fill-accent text-accent' : 'text-muted-foreground'}`}
             />
-            <span className="text-sm font-medium">{likes}</span>
+            <span className="text-sm font-bold">{likes}</span>
           </Button>
         </div>
         
@@ -82,7 +82,7 @@ const CaseStudyCard = ({
             <Badge 
               key={index} 
               variant="outline" 
-              className="text-xs border-border text-muted-foreground hover:border-accent hover:text-accent transition-colors"
+              className="text-xs uppercase tracking-wider border-border/50 text-muted-foreground hover:border-accent hover:text-accent hover:bg-accent/10 transition-all duration-300"
             >
               {tag}
             </Badge>
