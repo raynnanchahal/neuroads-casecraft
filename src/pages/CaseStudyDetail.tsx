@@ -262,29 +262,13 @@ const CaseStudyDetail = () => {
             </div>
           )}
 
-          {/* Attached Files Section - Exclude first image (cover) */}
-          {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 1 && (
+          {/* Media Gallery - Always show if there are media URLs */}
+          {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 0 && (
             <section className="mt-20">
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-10 tracking-tight uppercase">
-                ATTACHED <span className="text-accent">FILES</span>
+                PROJECT <span className="text-accent">GALLERY</span>
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {Object.values(caseStudy.media_urls).slice(1).map((url: any, index: number) => (
-                  <a
-                    key={index}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative aspect-square rounded-lg overflow-hidden bg-secondary/20 hover:bg-secondary/30 transition-colors border border-border/50"
-                  >
-                    <img
-                      src={url}
-                      alt={`Attachment ${index + 1}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </a>
-                ))}
-              </div>
+              {renderMedia(caseStudy.media_urls)}
             </section>
           )}
         </div>

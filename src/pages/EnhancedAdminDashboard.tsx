@@ -39,9 +39,6 @@ const EnhancedAdminDashboard = () => {
   const [editingStudy, setEditingStudy] = useState<CaseStudy | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [autoSaveTimeout, setAutoSaveTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [allTags, setAllTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState('');
-  const [showTagSuggestions, setShowTagSuggestions] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -57,30 +54,7 @@ const EnhancedAdminDashboard = () => {
 
   useEffect(() => {
     fetchCaseStudies();
-    fetchAllTags();
   }, []);
-
-  const fetchAllTags = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('case_studies')
-        .select('tags');
-      
-      if (error) throw error;
-      
-      // Extract unique tags from all case studies
-      const uniqueTags = new Set<string>();
-      data?.forEach((study: any) => {
-        if (study.tags && Array.isArray(study.tags)) {
-          study.tags.forEach((tag: string) => uniqueTags.add(tag));
-        }
-      });
-      
-      setAllTags(Array.from(uniqueTags).sort());
-    } catch (error) {
-      console.error('Failed to fetch tags:', error);
-    }
-  };
 
   const fetchCaseStudies = async () => {
     try {
@@ -115,19 +89,17 @@ const EnhancedAdminDashboard = () => {
 
   const openEditDialog = (study: CaseStudy) => {
     setEditingStudy(study);
-    const tagsString = study.tags.join(', ');
     setFormData({
       title: study.title,
       subtitle: study.subtitle || '',
       client_name: study.client_name,
       access_code: study.access_code,
       content: study.content || '',
-      tags: tagsString,
+      tags: study.tags.join(', '),
       categories: study.categories.join(', '),
       media_urls: study.media_urls || [],
       status: study.status
     });
-    setTagInput(tagsString);
     setIsDialogOpen(true);
   };
 
@@ -417,43 +389,14 @@ const EnhancedAdminDashboard = () => {
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="relative">
+                  <div>
                     <Label htmlFor="tags">Tags (comma-separated)</Label>
                     <Input
                       id="tags"
                       placeholder="React, E-commerce, Mobile"
-                      value={tagInput}
-                      onChange={(e) => {
-                        setTagInput(e.target.value);
-                        setFormData({...formData, tags: e.target.value});
-                        setShowTagSuggestions(true);
-                      }}
-                      onFocus={() => setShowTagSuggestions(true)}
-                      onBlur={() => setTimeout(() => setShowTagSuggestions(false), 200)}
+                      value={formData.tags}
+                      onChange={(e) => setFormData({...formData, tags: e.target.value})}
                     />
-                    {showTagSuggestions && tagInput && allTags.length > 0 && (
-                      <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-md shadow-lg max-h-48 overflow-y-auto">
-                        {allTags
-                          .filter(tag => tag.toLowerCase().includes(tagInput.split(',').pop()?.trim().toLowerCase() || ''))
-                          .map((tag, index) => (
-                            <div
-                              key={index}
-                              className="px-3 py-2 hover:bg-accent/10 cursor-pointer text-sm"
-                              onMouseDown={() => {
-                                const currentTags = tagInput.split(',').map(t => t.trim()).filter(t => t);
-                                currentTags.pop(); // Remove the last incomplete tag
-                                currentTags.push(tag);
-                                const newValue = currentTags.join(', ') + ', ';
-                                setTagInput(newValue);
-                                setFormData({...formData, tags: newValue});
-                              }}
-                            >
-                              {tag}
-                            </div>
-                          ))
-                        }
-                      </div>
-                    )}
                   </div>
                   <div>
                     <Label htmlFor="categories">Categories (comma-separated)</Label>

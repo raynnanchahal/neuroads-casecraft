@@ -14,12 +14,10 @@ const Header = () => {
         <div className="max-w-7xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center space-x-6">
-              <Link to="https://neural-scroll-spark-74.lovable.app/" target="_blank" rel="noopener noreferrer">
-                <h1 className="text-2xl font-bold text-foreground tracking-tight uppercase hover:text-accent transition-colors">
-                  NEURO<span className="text-accent">ADS</span>
-                </h1>
-              </Link>
+            <div className="flex items-center space-x-4">
+              <h1 className="text-2xl font-bold text-foreground tracking-tight uppercase">
+                NEURO<span className="text-accent">ADS</span>
+              </h1>
               <span className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
                 Case Studies
               </span>
