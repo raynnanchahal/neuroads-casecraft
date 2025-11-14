@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
 import CaseStudyCard from "@/components/case-study/CaseStudyCard";
-import AccessGate from "@/components/AccessGate";
 
 const CaseStudies = () => {
   const navigate = useNavigate();
@@ -45,23 +44,22 @@ const CaseStudies = () => {
   }
 
   return (
-    <AccessGate>
-      <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-gradient-subtle">
       <Header />
       
-      <main className="max-w-7xl mx-auto px-6 py-16 md:py-24">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24">
         {/* Hero Section */}
-        <div className="text-center mb-20 space-y-6">
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight tracking-tight">
+        <div className="text-center mb-16 sm:mb-20 space-y-4 sm:space-y-6">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl text-foreground leading-tight tracking-tight">
             SUCCESS STORIES THAT <span className="text-accent">DRIVE RESULTS</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4">
             Explore how we've helped leading brands achieve exceptional growth through data-driven marketing strategies and innovative advertising solutions.
           </p>
         </div>
 
         {/* Case Studies Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {caseStudies.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <h3 className="text-lg font-semibold text-muted-foreground">
@@ -88,38 +86,37 @@ const CaseStudies = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-24 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 shadow-elegant p-12">
-          <div className="text-center mb-12 space-y-3">
-            <h2 className="text-4xl md:text-5xl font-bold text-card-foreground tracking-tight">
+        <div className="mt-20 sm:mt-24 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 shadow-elegant p-8 sm:p-12">
+          <div className="text-center mb-8 sm:mb-12 space-y-3">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-card-foreground tracking-tight">
               PROVEN RESULTS ACROSS <span className="text-accent">INDUSTRIES</span>
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground">
               Our data-driven approach delivers consistent growth for our clients
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 text-center">
             <div className="space-y-2">
-              <div className="text-5xl md:text-6xl font-bold text-accent mb-3">300+</div>
-              <div className="text-sm uppercase tracking-wider text-muted-foreground">Campaigns Launched</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl text-accent mb-2 sm:mb-3">300+</div>
+              <div className="text-xs sm:text-sm uppercase tracking-wider text-muted-foreground">Campaigns Launched</div>
             </div>
             <div className="space-y-2">
-              <div className="text-5xl md:text-6xl font-bold text-accent mb-3">$50M+</div>
-              <div className="text-sm uppercase tracking-wider text-muted-foreground">Ad Spend Managed</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl text-accent mb-2 sm:mb-3">$100M+</div>
+              <div className="text-xs sm:text-sm uppercase tracking-wider text-muted-foreground">Generated</div>
             </div>
             <div className="space-y-2">
-              <div className="text-5xl md:text-6xl font-bold text-accent mb-3">4.2x</div>
-              <div className="text-sm uppercase tracking-wider text-muted-foreground">Average ROAS</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl text-accent mb-2 sm:mb-3">4.2x</div>
+              <div className="text-xs sm:text-sm uppercase tracking-wider text-muted-foreground">Average ROAS</div>
             </div>
             <div className="space-y-2">
-              <div className="text-5xl md:text-6xl font-bold text-accent mb-3">95%</div>
-              <div className="text-sm uppercase tracking-wider text-muted-foreground">Client Retention</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl text-accent mb-2 sm:mb-3">95%</div>
+              <div className="text-xs sm:text-sm uppercase tracking-wider text-muted-foreground">Client Retention</div>
             </div>
           </div>
         </div>
       </main>
     </div>
-    </AccessGate>
   );
 };
 

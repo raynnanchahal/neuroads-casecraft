@@ -9,7 +9,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Flow Research Collective Inspired - Dark Theme with Cyan Accents */
-    --background: 0 0% 7%;
+    --background: 0 0% 3.1%;
     --foreground: 0 0% 98%;
 
     --card: 0 0% 10%;
@@ -54,7 +54,7 @@ All colors MUST be HSL.
     --shadow-hover: 0 8px 32px -8px hsl(190 100% 50% / 0.25);
     
     /* Typography Scale */
-    --font-display: "Inter", system-ui, sans-serif;
+    --font-display: "Inter Tight", system-ui, sans-serif;
     --font-body: "Inter", system-ui, sans-serif;
     
     /* Transitions */
@@ -73,7 +73,7 @@ All colors MUST be HSL.
 
   .dark {
     /* Dark mode already matches the Flow theme */
-    --background: 0 0% 5%;
+    --background: 0 0% 3.1%;
     --foreground: 0 0% 98%;
 
     --card: 0 0% 8%;
@@ -118,6 +118,10 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-normal;
   }
 }
 

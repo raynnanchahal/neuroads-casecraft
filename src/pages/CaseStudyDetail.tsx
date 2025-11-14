@@ -262,42 +262,42 @@ const CaseStudyDetail = () => {
             </div>
           )}
 
-          {/* Media Gallery - Always show if there are media URLs */}
-          {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 0 && (
-            <section className="mt-20">
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-10 tracking-tight uppercase">
-                PROJECT <span className="text-accent">GALLERY</span>
-              </h2>
-              {renderMedia(caseStudy.media_urls)}
-            </section>
-          )}
-        </div>
+        {/* Media Gallery - Always show if there are media URLs */}
+        {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 0 && (
+          <section className="mt-16 sm:mt-20">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-foreground mb-8 sm:mb-10 tracking-tight uppercase">
+              PROJECT <span className="text-accent">GALLERY</span>
+            </h2>
+            {renderMedia(caseStudy.media_urls)}
+          </section>
+        )}
+      </div>
 
-        {/* CTA Section */}
-        <div className="mt-32 text-center">
-          <Card className="p-16 md:p-20 bg-card/50 backdrop-blur-sm border-accent/30 shadow-elegant overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-accent opacity-5" />
-            <div className="relative space-y-8">
-              <h3 className="text-4xl md:text-5xl font-bold mb-8 tracking-tight uppercase">
-                READY TO TRANSFORM YOUR <span className="text-accent">BUSINESS?</span>
-              </h3>
-              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-                Let's create a success story like this for your company. Get started with a free consultation.
-              </p>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="px-10 py-6 text-lg uppercase tracking-wider border-accent/50 hover:bg-accent/10 hover:border-accent text-accent hover:scale-105 transition-all duration-300 font-bold"
-                onClick={() => window.open('https://calendly.com/ritishnanchahal-amld/discovery', '_blank')}
-              >
-                START YOUR PROJECT TODAY
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </main>
-    </div>
-  );
+      {/* CTA Section */}
+      <div className="mt-24 sm:mt-32 text-center">
+        <Card className="p-8 sm:p-12 md:p-16 lg:p-20 bg-card/50 backdrop-blur-sm border-accent/30 shadow-elegant overflow-hidden relative mx-4 sm:mx-6">
+          <div className="absolute inset-0 bg-gradient-accent opacity-5" />
+          <div className="relative space-y-6 sm:space-y-8">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl mb-6 sm:mb-8 tracking-tight uppercase">
+              READY TO TRANSFORM YOUR <span className="text-accent">BUSINESS?</span>
+            </h3>
+            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-4">
+              Let's create a success story like this for your company. Get started with a free consultation.
+            </p>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="px-8 sm:px-10 py-5 sm:py-6 text-base sm:text-lg uppercase tracking-wider border-accent/50 hover:bg-accent/10 hover:border-accent text-accent hover:scale-105 transition-all duration-300"
+              onClick={() => window.open('https://cal.com/ritish-nanchahal/call', '_blank')}
+            >
+              START YOUR PROJECT TODAY
+            </Button>
+          </div>
+        </Card>
+      </div>
+    </main>
+  </div>
+);
 };
 
 export default CaseStudyDetail;
