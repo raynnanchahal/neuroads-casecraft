@@ -193,7 +193,7 @@ const CaseStudyDetail = () => {
               </div>
 
               {/* Title & Subtitle */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight uppercase">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight tracking-tight uppercase break-words">
                 {caseStudy.title}
               </h1>
               
@@ -265,7 +265,7 @@ const CaseStudyDetail = () => {
         {/* Media Gallery - Always show if there are media URLs */}
         {caseStudy.media_urls && Object.keys(caseStudy.media_urls).length > 0 && (
           <section className="mt-16 sm:mt-20">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl text-foreground mb-8 sm:mb-10 tracking-tight uppercase">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl text-foreground mb-8 sm:mb-10 tracking-tight uppercase break-words">
               PROJECT <span className="text-accent">GALLERY</span>
             </h2>
             {renderMedia(caseStudy.media_urls)}
@@ -278,16 +278,16 @@ const CaseStudyDetail = () => {
         <Card className="p-8 sm:p-12 md:p-16 lg:p-20 bg-card/50 backdrop-blur-sm border-accent/30 shadow-elegant overflow-hidden relative mx-4 sm:mx-6">
           <div className="absolute inset-0 bg-gradient-accent opacity-5" />
           <div className="relative space-y-6 sm:space-y-8">
-            <h3 className="text-3xl sm:text-4xl md:text-5xl mb-6 sm:mb-8 tracking-tight uppercase">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl mb-6 sm:mb-8 tracking-tight uppercase break-words">
               READY TO TRANSFORM YOUR <span className="text-accent">BUSINESS?</span>
             </h3>
-            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-4">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-4">
               Let's create a success story like this for your company. Get started with a free consultation.
             </p>
             <Button 
               size="lg" 
               variant="outline"
-              className="px-8 sm:px-10 py-5 sm:py-6 text-base sm:text-lg uppercase tracking-wider border-accent/50 hover:bg-accent/10 hover:border-accent text-accent hover:scale-105 transition-all duration-300"
+              className="px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-6 text-sm sm:text-base md:text-lg uppercase tracking-wider border-accent/50 hover:bg-accent/10 hover:border-accent text-accent hover:scale-105 transition-all duration-300 w-full sm:w-auto"
               onClick={() => window.open('https://cal.com/ritish-nanchahal/call', '_blank')}
             >
               START YOUR PROJECT TODAY
