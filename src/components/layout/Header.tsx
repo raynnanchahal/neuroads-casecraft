@@ -14,9 +14,9 @@ const Header = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 sm:gap-4 shrink-0">
+            <a href="https://neuroads.agency" className="flex items-center gap-2 sm:gap-4 shrink-0">
               <img src={logo} alt="NeuroAds" className="h-8 sm:h-10 w-auto" />
-            </Link>
+            </a>
 
             {/* Search Bar */}
             <div className="flex-1 max-w-2xl">

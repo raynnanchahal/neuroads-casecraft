@@ -104,10 +104,7 @@ export type Database = {
         Args: { case_study_id: string }
         Returns: number
       }
-      verify_access_code: {
-        Args: { input_code: string }
-        Returns: boolean
-      }
+      verify_access_code: { Args: { input_code: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

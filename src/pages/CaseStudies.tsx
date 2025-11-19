@@ -50,12 +50,9 @@ const CaseStudies = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24">
         {/* Hero Section */}
         <div className="text-center mb-16 sm:mb-20 space-y-4 sm:space-y-6">
-          <h1 className="text-4xl sm:text-5xl md:text-7xl text-foreground leading-tight tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-foreground leading-tight tracking-tight break-words">
             SUCCESS STORIES THAT <span className="text-accent">DRIVE RESULTS</span>
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4">
-            Explore how we've helped leading brands achieve exceptional growth through data-driven marketing strategies and innovative advertising solutions.
-          </p>
         </div>
 
         {/* Case Studies Grid */}
@@ -88,7 +85,7 @@ const CaseStudies = () => {
         {/* Stats Section */}
         <div className="mt-20 sm:mt-24 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 shadow-elegant p-8 sm:p-12">
           <div className="text-center mb-8 sm:mb-12 space-y-3">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl text-card-foreground tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl text-card-foreground tracking-tight break-words">
               PROVEN RESULTS ACROSS <span className="text-accent">INDUSTRIES</span>
             </h2>
             <p className="text-base sm:text-lg text-muted-foreground">
@@ -98,7 +95,7 @@ const CaseStudies = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 text-center">
             <div className="space-y-2">
-              <div className="text-4xl sm:text-5xl md:text-6xl text-accent mb-2 sm:mb-3">300+</div>
+              <div className="text-4xl sm:text-5xl md:text-6xl text-accent mb-2 sm:mb-3">5000+</div>
               <div className="text-xs sm:text-sm uppercase tracking-wider text-muted-foreground">Campaigns Launched</div>
             </div>
             <div className="space-y-2">
